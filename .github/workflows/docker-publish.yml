@@ -17,21 +17,21 @@ env:
 jobs:
   # Run tests.
   # See also https://docs.docker.com/docker-hub/builds/automated-testing/
-  build:
+  test:
     runs-on: ubuntu-latest
-
+    
     steps:
       - uses: actions/checkout@v2
-
-      - name: Run tests
-        run:
-            docker build . --file Dockerfile
+      - uses: actions/setup-go@v2
+        with:
+          stable: 'true'
+      - run: go test --race -v ./...
 
   # Push image to GitHub Packages.
   # See also https://docs.docker.com/docker-hub/builds/
   push:
     # Ensure test job passes before pushing image.
-    needs: build
+    needs: test
 
     runs-on: ubuntu-latest
     if: github.event_name == 'push'
@@ -44,6 +44,10 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+          
+      - name: Build image
+        run:
+            docker build . --file Dockerfile
       
       - name: Push image
         run: |
