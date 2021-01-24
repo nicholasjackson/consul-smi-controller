@@ -47,7 +47,7 @@ jobs:
           
       - name: Build image
         run:
-            docker build . --file Dockerfile
+            docker build -t $IMAGE_NAME . --file Dockerfile
       
       - name: Push image
         run: |
