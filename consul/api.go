@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/go-logr/logr"
+	"github.com/kr/pretty"
 	"github.com/nicholasjackson/consul-smi-controller/consul/client"
 	splitv1alpha1 "github.com/servicemeshinterface/smi-sdk-go/pkg/apis/split/v1alpha1"
 	ctrl "sigs.k8s.io/controller-runtime"
@@ -33,6 +34,22 @@ func (a *API) UpsertTrafficSplit(
 	r controllerclient.Client,
 	l logr.Logger,
 	tt *splitv1alpha1.TrafficSplit) (ctrl.Result, error) {
+
+	l.Info("Upsert new Traffic Split", "data", pretty.Sprint(tt))
+
+	return ctrl.Result{}, nil
+}
+
+// DeleteTrafficSplit implements the API interface method
+// for callbacks when a TrafficSplit resource is deleted
+// in the Kubernetes cluster
+func (a *API) DeleteTrafficSplit(
+	ctx context.Context,
+	r controllerclient.Client,
+	l logr.Logger,
+	tt *splitv1alpha1.TrafficSplit) (ctrl.Result, error) {
+
+	l.Info("Delete new Traffic Split", "data", pretty.Sprint(tt))
 
 	return ctrl.Result{}, nil
 }

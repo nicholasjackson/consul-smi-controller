@@ -7,5 +7,16 @@ build_docker:
 push_docker:
 	docker push ${DOCKER_REPO}:${DOCKER_VERSION}
 
-run:
-	ENABLE_WEBHOOKS=false go run main.go
+run: fetch_certs
+	go run main.go
+
+fetch_certs:
+	mkdir -p /tmp/k8s-webhook-server/serving-certs/
+	
+	kubectl get secret controller-webhook-certificate -n smi -o json | \
+		jq -r '.data."tls.crt"' | \
+		base64 -d > /tmp/k8s-webhook-server/serving-certs/tls.crt
+	
+	kubectl get secret controller-webhook-certificate -n smi -o json | \
+		jq -r '.data."tls.key"' | \
+		base64 -d > /tmp/k8s-webhook-server/serving-certs/tls.key

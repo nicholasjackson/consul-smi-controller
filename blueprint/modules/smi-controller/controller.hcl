@@ -10,5 +10,8 @@ helm "smi-controler" {
 
   values_string = {
     "controller.enabled" = "false"
+    "webhook.service" = "smi-webhook"
+    "webhook.namespace" = "shipyard"
+    "webhook.additionalDNSNames.0" = "smi-webhook.shipyard.svc"
   }
 }
