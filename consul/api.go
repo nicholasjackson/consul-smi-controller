@@ -60,7 +60,16 @@ func (a *API) UpsertTrafficSplit(
 
 	err := a.client.WriteServiceSplitter(ss)
 
-	return ctrl.Result{}, err
+	// if we can not process the request we should not keep retrying
+	// returning a default ctrl.Request{} and no error
+	// tells the controller we have accepted the config
+	// TODO: we need to determine recoverable errors from non
+	// recoverable
+	if err != nil {
+		l.Error(err, "Unable to write service splitter to Consul")
+	}
+
+	return ctrl.Result{}, nil
 }
 
 // DeleteTrafficSplit implements the API interface method
@@ -78,7 +87,15 @@ func (a *API) DeleteTrafficSplit(
 		"backends", tt.Spec.Backends,
 	)
 
+	// if we can not process the request we should not keep retrying
+	// returning a default ctrl.Request{} and no error
+	// tells the controller we have accepted the config
+	// TODO: we need to determine recoverable errors from non
+	// recoverable
 	err := a.client.DeleteServiceSplitter(tt.Spec.Service)
+	if err != nil {
+		l.Error(err, "Unable to delete service splitter from Consul")
+	}
 
-	return ctrl.Result{}, err
+	return ctrl.Result{}, nil
 }

@@ -15,15 +15,15 @@ spec:
     targetPort: 9102
 
 ---
-# API service version 2
+# API service version 1
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: api-deployment-v1
+  name: api
   labels:
     app: api-v1
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: api-v1

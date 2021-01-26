@@ -9,6 +9,6 @@ helm "flagger" {
 
   values_string = {
     "meshProvider" = ""
-    "metricsServer" = "http://prometheus-stack-kube-prom-prometheus:9090" 
+    "metricsServer" = "http://prometheus-stack-kube-prom-prometheus.default.svc:9090" 
   }
 }

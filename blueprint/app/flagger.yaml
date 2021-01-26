@@ -1,16 +1,3 @@
-#apiVersion: split.smi-spec.io/v1alpha1
-#kind: TrafficSplit
-#metadata:
-#  name: api-split
-#spec:
-#  # The root service that clients use to connect to the destination application.
-#  service: api
-#  # Services inside the namespace with their own selectors, endpoints and configuration.
-#  backends:
-#  - service: v1
-#    weight: 9000m
-#  - service: v2
-#    weight: 1000m
 ---
 apiVersion: flagger.app/v1beta1
 kind: Canary
@@ -23,7 +10,7 @@ spec:
   targetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: api-deployment-v1
+    name: api
   # the maximum time in seconds for the canary deployment
   # to make progress before it is rollback (default 600s)
   progressDeadlineSeconds: 60
@@ -45,9 +32,71 @@ spec:
     stepWeight: 5
     # Linkerd Prometheus checks
     metrics:
-    - name: request-success-rate
+    - name: "consul-requests"
+      templateRef:
+        name: consul-requests
+        # namespace is optional
+        # when not specified, the canary namespace will be used
+        namespace: default
       # minimum req success rate (non 5xx responses)
       # percentage (0-100)
       thresholdRange:
         min: 99
       interval: 1m
+
+---
+apiVersion: flagger.app/v1beta1
+kind: MetricTemplate
+metadata:
+  name: consul-requests
+  namespace: default
+spec:
+  provider:
+    type: prometheus
+    address: http://prometheus-stack-kube-prom-prometheus.default.svc:9090
+  query: |
+    sum(
+      rate(
+        envoy_cluster_upstream_rq{
+          namespace="{{ namespace }}",
+          pod=~"{{ target }}-[0-9a-zA-Z]+(-[0-9a-zA-Z]+)",
+          envoy_cluster_name="local_app",
+          envoy_response_code!~"5.*"
+        }[{{ interval }}]
+      )
+    )
+    /
+    sum(
+      rate(
+        envoy_cluster_upstream_rq{
+          namespace="{{ namespace }}",
+          envoy_cluster_name="local_app",
+          pod=~"{{ target }}-[0-9a-zA-Z]+(-[0-9a-zA-Z]+)"
+        }[{{ interval }}]
+      )
+    )
+    * 100
+
+---
+apiVersion: flagger.app/v1beta1
+kind: MetricTemplate
+metadata:
+  name: consul-duration
+  namespace: default
+spec:
+  provider:
+    type: prometheus
+    address: http://prometheus-stack-kube-prom-prometheus.default.svc:9090
+  query: |
+    histogram_quantile(
+      0.99,
+      sum(
+        rate(
+          envoy_cluster_upstream_rq_time_bucket{
+            namespace="{{ namespace }}",
+            envoy_cluster_name="local_app",
+            pod=~"{{ target }}-[0-9a-zA-Z]+(-[0-9a-zA-Z]+)"
+          }[{{ interval }}]
+        )
+      ) by (le)
+    )

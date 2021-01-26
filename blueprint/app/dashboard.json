@@ -161,7 +161,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "rate(envoy_http_downstream_rq_total{consul_source_service=\"api\", envoy_http_conn_manager_prefix=\"public_listener\",pod=~\"api-deployment-v1-.*\"}[30s])",
+          "expr": "rate(envoy_cluster_upstream_rq{pod=~\"api-primary.*\", namespace=\"default\", envoy_cluster_name=\"local_app\"}[30s])",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -182,7 +182,7 @@
         "buckets": null,
         "mode": "time",
         "name": null,
-       "show": true,
+        "show": true,
         "values": []
       },
       "yaxes": [
@@ -256,7 +256,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "rate(envoy_http_downstream_rq_total{consul_source_service=\"api\", envoy_http_conn_manager_prefix=\"public_listener\",pod=~\"api-deployment-v2-.*\"}[30s])",
+          "expr": "rate(envoy_cluster_upstream_rq{pod!~\"api-primary.*\", namespace=\"default\", envoy_cluster_name=\"local_app\"}[30s])",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -320,4 +320,4 @@
   "title": "Canary",
   "uid": "irtYjefGk",
   "version": 4
-} 
+}

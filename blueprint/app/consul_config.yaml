@@ -20,12 +20,11 @@ kind: ServiceResolver
 metadata:
   name: api
 spec:
-  defaultSubset: v1
+  defaultSubset: api-primary
   subsets:
-    v1:
+    api-primary:
       filter: "Service.Meta.version == v1"
       onlyPassing: true
-    v2:
+    api-canary:
       filter: "Service.Meta.version == v2"
       onlyPassing: true
-
