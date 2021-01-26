@@ -28,8 +28,48 @@ ingress "consul" {
     
     config {
       cluster = "k8s_cluster.${var.consul_k8s_cluster}"
-      address = "consul-ui.default.svc"
-      port = 80
+      address = "consul-server.default.svc"
+      port = 8500
+    }
+  }
+}
+
+ingress "consul-rpc" {
+  source {
+    driver = "local"
+    
+    config {
+      port = 8300
+    }
+  }
+  
+  destination {
+    driver = "k8s"
+    
+    config {
+      cluster = "k8s_cluster.${var.consul_k8s_cluster}"
+      address = "consul-server.default.svc"
+      port = 8300
+    }
+  }
+}
+
+ingress "consul-lan-serf" {
+  source {
+    driver = "local"
+    
+    config {
+      port = 8301
+    }
+  }
+  
+  destination {
+    driver = "k8s"
+    
+    config {
+      cluster = "k8s_cluster.${var.consul_k8s_cluster}"
+      address = "consul-server.default.svc"
+      port = 8301
     }
   }
 }

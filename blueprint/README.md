@@ -14,6 +14,10 @@ This blueprint creates a Kubernetes cluster and installs the following elements:
 * Prometheus
 * Loki
 * Grafana
+* Flagger
+* Cert Manager
+* SMI Controller for Consul
+* Example Application
 
 To access Grafana the following details can be used:
 

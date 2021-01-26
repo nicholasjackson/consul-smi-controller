@@ -1,11 +1,11 @@
-container "api_1" {
+container "api_3" {
   image {
     name = "nicholasjackson/fake-service:vm-v0.13.2"
   }
 
   volume {
-    source      = "./files/api_1.hcl"
-    destination = "/config/api_1.hcl"
+    source      = "./files/api_3.hcl"
+    destination = "/config/api_3.hcl"
   }
 
   network { 

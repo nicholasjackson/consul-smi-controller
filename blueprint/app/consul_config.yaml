@@ -29,16 +29,3 @@ spec:
       filter: "Service.Meta.version == v2"
       onlyPassing: true
 
-#---
-#apiVersion: consul.hashicorp.com/v1alpha1
-#kind: ServiceSplitter
-#metadata:
-#  name: api
-#spec:
-#  splits:
-#    - weight: 70
-#      service: api
-#      serviceSubset: v1
-#    - weight: 30
-#      service: api
-#      serviceSubset: v2

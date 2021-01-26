@@ -7,6 +7,7 @@ import (
 // Consul defines an interface for the Consul client
 type Consul interface {
 	WriteServiceSplitter(ss *api.ServiceSplitterConfigEntry) error
+	DeleteServiceSplitter(name string) error
 }
 
 type consulImpl struct {
@@ -28,6 +29,12 @@ func New(addr string) (Consul, error) {
 
 func (c *consulImpl) WriteServiceSplitter(ss *api.ServiceSplitterConfigEntry) error {
 	_, _, err := c.cc.ConfigEntries().Set(ss, nil)
+
+	return err
+}
+
+func (c *consulImpl) DeleteServiceSplitter(name string) error {
+	_, err := c.cc.ConfigEntries().Delete("ServiceSplitter", name, nil)
 
 	return err
 }

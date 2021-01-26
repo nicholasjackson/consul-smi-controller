@@ -17,7 +17,6 @@ k8s_config "app-pods" {
     "./app/load_test.yaml",
     "./app/web.yaml",
     "./app/apiV1.yaml",
-    "./app/apiV2.yaml",
   ]
 
   wait_until_ready = true

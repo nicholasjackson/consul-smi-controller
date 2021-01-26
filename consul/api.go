@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/go-logr/logr"
+	"github.com/hashicorp/consul/api"
 	"github.com/kr/pretty"
 	"github.com/nicholasjackson/consul-smi-controller/consul/client"
 	splitv1alpha1 "github.com/servicemeshinterface/smi-sdk-go/pkg/apis/split/v1alpha1"
@@ -11,6 +12,9 @@ import (
 	controllerclient "sigs.k8s.io/controller-runtime/pkg/client"
 )
 
+// API defines a controller adaptor for Conul Service Mesh
+// it contains all the required callbacks invoked by the SMI controller
+// SDK.
 type API struct {
 	client client.Consul
 }
@@ -35,9 +39,29 @@ func (a *API) UpsertTrafficSplit(
 	l logr.Logger,
 	tt *splitv1alpha1.TrafficSplit) (ctrl.Result, error) {
 
-	l.Info("Upsert new Traffic Split", "data", pretty.Sprint(tt))
+	l.Info("Upsert new Traffic Split")
+	l.Info("details",
+		"service", tt.Spec.Service,
+		"backends", tt.Spec.Backends,
+	)
 
-	return ctrl.Result{}, nil
+	ss := &api.ServiceSplitterConfigEntry{}
+	ss.Name = tt.Spec.Service
+	ss.Splits = []api.ServiceSplit{}
+
+	for _, b := range tt.Spec.Backends {
+		ss.Splits = append(
+			ss.Splits,
+			api.ServiceSplit{
+				Service:       ss.Name,
+				ServiceSubset: b.Service,
+				Weight:        float32(b.Weight.AsDec().UnscaledBig().Int64()),
+			})
+	}
+
+	err := a.client.WriteServiceSplitter(ss)
+
+	return ctrl.Result{}, err
 }
 
 // DeleteTrafficSplit implements the API interface method
@@ -50,6 +74,12 @@ func (a *API) DeleteTrafficSplit(
 	tt *splitv1alpha1.TrafficSplit) (ctrl.Result, error) {
 
 	l.Info("Delete new Traffic Split", "data", pretty.Sprint(tt))
+	l.Info("details",
+		"service", tt.Spec.Service,
+		"backends", tt.Spec.Backends,
+	)
 
-	return ctrl.Result{}, nil
+	err := a.client.DeleteServiceSplitter(tt.Spec.Service)
+
+	return ctrl.Result{}, err
 }
