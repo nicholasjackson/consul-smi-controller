@@ -34,7 +34,7 @@ func (c *consulImpl) WriteServiceSplitter(ss *api.ServiceSplitterConfigEntry) er
 }
 
 func (c *consulImpl) DeleteServiceSplitter(name string) error {
-	_, err := c.cc.ConfigEntries().Delete("ServiceSplitter", name, nil)
+	_, err := c.cc.ConfigEntries().Delete(api.ServiceSplitter, name, nil)
 
 	return err
 }

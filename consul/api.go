@@ -5,7 +5,6 @@ import (
 
 	"github.com/go-logr/logr"
 	"github.com/hashicorp/consul/api"
-	"github.com/kr/pretty"
 	"github.com/nicholasjackson/consul-smi-controller/consul/client"
 	splitv1alpha1 "github.com/servicemeshinterface/smi-sdk-go/pkg/apis/split/v1alpha1"
 	ctrl "sigs.k8s.io/controller-runtime"
@@ -45,7 +44,7 @@ func (a *API) UpsertTrafficSplit(
 		"backends", tt.Spec.Backends,
 	)
 
-	ss := &api.ServiceSplitterConfigEntry{}
+	ss := &api.ServiceSplitterConfigEntry{Kind: api.ServiceSplitter}
 	ss.Name = tt.Spec.Service
 	ss.Splits = []api.ServiceSplit{}
 
@@ -73,7 +72,7 @@ func (a *API) DeleteTrafficSplit(
 	l logr.Logger,
 	tt *splitv1alpha1.TrafficSplit) (ctrl.Result, error) {
 
-	l.Info("Delete new Traffic Split", "data", pretty.Sprint(tt))
+	l.Info("Delete new Traffic Split")
 	l.Info("details",
 		"service", tt.Spec.Service,
 		"backends", tt.Spec.Backends,

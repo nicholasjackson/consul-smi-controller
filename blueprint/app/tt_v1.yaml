@@ -1,4 +1,4 @@
-apiVersion: split.smi-spec.io/v1alpha3
+apiVersion: split.smi-spec.io/v1alpha1
 kind: TrafficSplit
 metadata:
   name: api-split
@@ -8,6 +8,6 @@ spec:
   # Services inside the namespace with their own selectors, endpoints and configuration.
   backends:
   - service: v1
-    weight: 9000m
+    weight: "90"
   - service: v2
-    weight: 1000m
+    weight: "10"

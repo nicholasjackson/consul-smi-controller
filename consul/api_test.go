@@ -35,7 +35,7 @@ func TestUpsertCallsConsul(t *testing.T) {
 	args := mc.Mock.Calls[0].Arguments
 
 	ss := args.Get(0).(*api.ServiceSplitterConfigEntry)
-	//assert.Equal(t, "ServiceSplitter", ss.Kind)
+	assert.Equal(t, "service-splitter", ss.Kind)
 	assert.Equal(t, splitConfig.Spec.Service, ss.Name)
 
 	assert.Equal(t, float32(100), ss.Splits[0].Weight)
@@ -49,7 +49,7 @@ func TestDeleteCallsConsul(t *testing.T) {
 	_, err := a.DeleteTrafficSplit(context.Background(), nil, l, splitConfig)
 	assert.NoError(t, err)
 
-	mc.AssertCalled(t, "DeleteServiceSplitter", mock.Anything)
+	mc.AssertCalled(t, "DeleteServiceSplitter", splitConfig.Spec.Service)
 }
 
 func splitWithTwoBackend() *splitv1alpha1.TrafficSplit {
