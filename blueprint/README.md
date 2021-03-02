@@ -6,7 +6,7 @@ slug: k8s_consul_stack
 
 # Consul Service Mesh on Kubernetes with Monitoring
 
-shipyard_version: ">= 0.1.18"
+shipyard_version: ">= 0.2.0"
 
 This blueprint creates a Kubernetes cluster and installs the following elements:
 
