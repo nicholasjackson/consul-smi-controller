@@ -22,4 +22,5 @@ replace github.com/servicemeshinterface/smi-sdk-go v0.4.1 => github.com/nicholas
 
 //replace github.com/servicemeshinterface/smi-sdk-go v0.4.1 => ../../servicemeshinterface/smi-sdk-go
 
-replace github.com/nicholasjackson/smi-controller-sdk v0.0.0-20210124163956-d67d74f3897d => ../smi-controller-sdk
+//replace github.com/servicemeshinterface/smi-sdk-go v0.4.1 => ../../servicemeshinterface/smi-sdk-go
+//replace github.com/nicholasjackson/smi-controller-sdk v0.0.0-20210126192314-94ac0af6db56 => ../smi-controller-sdk

@@ -355,11 +355,12 @@ github.com/nicholasjackson/smi-controller-sdk v0.0.0-20210124102718-132ae2da7825
 github.com/nicholasjackson/smi-controller-sdk v0.0.0-20210124102718-132ae2da7825/go.mod h1:UYQhcVy6Vdfd9ajffCxJJNNkN+SVf/aMPlElhCIJSXQ=
 github.com/nicholasjackson/smi-controller-sdk v0.0.0-20210124163956-d67d74f3897d h1:PsbT0qExWhTcYj9QzEpVVnKL0/i2fe8PdlGiXk5wXh0=
 github.com/nicholasjackson/smi-controller-sdk v0.0.0-20210124163956-d67d74f3897d/go.mod h1:udiKR850l9aO0P7jeFNQDf2V5O1L/I9ESK3J1Lh6dTo=
-github.com/nicholasjackson/smi-controller-sdk v0.0.0-20210301132123-7f6bdf3d6073 h1:S+KYT58dg4JxtW6h8IarNVQn6zgbmzR0K2VUt6kTEMY=
-github.com/nicholasjackson/smi-controller-sdk v0.0.0-20210301132123-7f6bdf3d6073/go.mod h1:F82PxiIc2GOCwu78NsZXS23+7P7p+qceC90uUeRMeeQ=
+github.com/nicholasjackson/smi-controller-sdk v0.0.0-20210126192314-94ac0af6db56 h1:KAqM7XdEFtuHt7pAk6I0JJQcje3ntL792X0w3N/yoNs=
+github.com/nicholasjackson/smi-controller-sdk v0.0.0-20210126192314-94ac0af6db56/go.mod h1:udiKR850l9aO0P7jeFNQDf2V5O1L/I9ESK3J1Lh6dTo=
 github.com/nicholasjackson/smi-sdk-go v0.0.0-20210123215756-d8c5233cc084 h1:wGPDJ3v2sV0u0innCpCnGRT7YxSTDeXCA0F5MbOxVdg=
 github.com/nicholasjackson/smi-sdk-go v0.0.0-20210123215756-d8c5233cc084/go.mod h1:u3SgKM5H44Ppvkhxz/zEC/4IRFz+M7nezyJw+twsq2k=
-github.com/niemeyer/pretty v0.0.0-20200227124842-a10e7caefd8e/go.mod h1:zD1mROLANZcx1PVRCS0qkT7pwLkGfwJo4zjcN/Tysno=
+github.com/nicholasjackson/smi-sdk-go v0.0.0-20210126180050-20b017789d6a h1:DqUSOYKGxY93E9JQMbuc/CaKUdh+GKqAdLDQrLz+l9w=
+github.com/nicholasjackson/smi-sdk-go v0.0.0-20210126180050-20b017789d6a/go.mod h1:raSbcBbDcDqhq5GWuTkiQXTEI9JVP7mNflL4SrmUSLE=
 github.com/nxadm/tail v1.4.4/go.mod h1:kenIhsEOeOJmVchQTgglprH7qJGnHDVpk1VPCcaMI8A=
 github.com/oklog/ulid v1.3.1/go.mod h1:CirwcVhetQ6Lv90oh/F+FBtV6XMibvdAFo93nm5qn4U=
 github.com/olekukonko/tablewriter v0.0.0-20170122224234-a0225b3f23b5/go.mod h1:vsDQFd/mU46D+Z4whnwzcISnGGzXWMclvtLoiIKAKIo=
