@@ -38,8 +38,7 @@ func (a *API) UpsertTrafficSplit(
 	l logr.Logger,
 	tt *splitv1alpha1.TrafficSplit) (ctrl.Result, error) {
 
-	l.Info("Upsert new Traffic Split")
-	l.Info("details",
+	l.Info("Upsert new Traffic Split",
 		"service", tt.Spec.Service,
 		"backends", tt.Spec.Backends,
 	)
@@ -81,8 +80,7 @@ func (a *API) DeleteTrafficSplit(
 	l logr.Logger,
 	tt *splitv1alpha1.TrafficSplit) (ctrl.Result, error) {
 
-	l.Info("Delete new Traffic Split")
-	l.Info("details",
+	l.Info("Delete new Traffic Split",
 		"service", tt.Spec.Service,
 		"backends", tt.Spec.Backends,
 	)

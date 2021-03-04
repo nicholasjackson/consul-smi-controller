@@ -18,5 +18,6 @@ func main() {
 	sdk.API().RegisterV1Alpha(api)
 
 	// create and start a the controller
-	controller.Start()
+	config := controller.DefaultConfig()
+	controller.Start(config)
 }

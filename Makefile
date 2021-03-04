@@ -20,3 +20,6 @@ fetch_certs:
 	kubectl get secret controller-webhook-certificate -n smi -o json | \
 		jq -r '.data."tls.key"' | \
 		base64 -d > /tmp/k8s-webhook-server/serving-certs/tls.key
+
+functional_tests: fetch_certs
+	cd functional_tests	&& go run .
