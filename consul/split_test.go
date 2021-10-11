@@ -7,10 +7,9 @@ import (
 	"github.com/go-logr/logr"
 	"github.com/hashicorp/consul/api"
 	"github.com/nicholasjackson/consul-smi-controller/consul/client"
-	splitv1alpha1 "github.com/servicemeshinterface/smi-sdk-go/pkg/apis/split/v1alpha1"
+	splitv1alpha4 "github.com/servicemeshinterface/smi-controller-sdk/apis/split/v1alpha4"
 	"github.com/stretchr/testify/mock"
 	assert "github.com/stretchr/testify/require"
-	"k8s.io/apimachinery/pkg/api/resource"
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
 )
 
@@ -18,13 +17,15 @@ func setup(t *testing.T) (*API, *client.MockImpl, logr.Logger) {
 	mc := &client.MockImpl{}
 	mc.On("WriteServiceSplitter", mock.Anything).Return(nil)
 	mc.On("DeleteServiceSplitter", mock.Anything).Return(nil)
+	mc.On("WriteServiceRoute", mock.Anything).Return(nil)
+	mc.On("DeleteServiceRoute", mock.Anything).Return(nil)
 
 	l := logf.Log.WithName("test")
 
 	return &API{mc}, mc, l
 }
 
-func TestUpsertCallsConsul(t *testing.T) {
+func TestUpsertTrafficSplitCallsConsul(t *testing.T) {
 	a, mc, l := setup(t)
 
 	splitConfig := splitWithTwoBackend()
@@ -42,7 +43,7 @@ func TestUpsertCallsConsul(t *testing.T) {
 	assert.Equal(t, float32(900), ss.Splits[1].Weight)
 }
 
-func TestDeleteCallsConsul(t *testing.T) {
+func TestDeleteTrafficSplitCallsConsul(t *testing.T) {
 	a, mc, l := setup(t)
 
 	splitConfig := splitWithTwoBackend()
@@ -52,26 +53,23 @@ func TestDeleteCallsConsul(t *testing.T) {
 	mc.AssertCalled(t, "DeleteServiceSplitter", splitConfig.Spec.Service)
 }
 
-func splitWithTwoBackend() *splitv1alpha1.TrafficSplit {
-	splitWithTwo := splitv1alpha1.TrafficSplit{
-		Spec: splitv1alpha1.TrafficSplitSpec{
+func splitWithTwoBackend() *splitv1alpha4.TrafficSplit {
+	splitWithTwo := splitv1alpha4.TrafficSplit{
+		Spec: splitv1alpha4.TrafficSplitSpec{
 			Service: "testservice",
-			Backends: []splitv1alpha1.TrafficSplitBackend{
-				splitv1alpha1.TrafficSplitBackend{
+			Backends: []splitv1alpha4.TrafficSplitBackend{
+				splitv1alpha4.TrafficSplitBackend{
 					Service: "v1",
 				},
-				splitv1alpha1.TrafficSplitBackend{
+				splitv1alpha4.TrafficSplitBackend{
 					Service: "v2",
 				},
 			},
 		},
 	}
 
-	w1, _ := resource.ParseQuantity("100m")
-	w2, _ := resource.ParseQuantity("900m")
-
-	splitWithTwo.Spec.Backends[0].Weight = &w1
-	splitWithTwo.Spec.Backends[1].Weight = &w2
+	splitWithTwo.Spec.Backends[0].Weight = 100
+	splitWithTwo.Spec.Backends[1].Weight = 900
 
 	return &splitWithTwo
 }

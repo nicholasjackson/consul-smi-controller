@@ -4,8 +4,8 @@ import (
 	"os"
 
 	"github.com/nicholasjackson/consul-smi-controller/consul"
-	"github.com/nicholasjackson/smi-controller-sdk/sdk"
-	"github.com/nicholasjackson/smi-controller-sdk/sdk/controller"
+	"github.com/servicemeshinterface/smi-controller-sdk/sdk"
+	"github.com/servicemeshinterface/smi-controller-sdk/sdk/controller"
 )
 
 func main() {

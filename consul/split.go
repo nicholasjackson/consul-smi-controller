@@ -6,7 +6,7 @@ import (
 	"github.com/go-logr/logr"
 	"github.com/hashicorp/consul/api"
 	"github.com/nicholasjackson/consul-smi-controller/consul/client"
-	splitv1alpha1 "github.com/servicemeshinterface/smi-sdk-go/pkg/apis/split/v1alpha1"
+	splitv1alpha4 "github.com/servicemeshinterface/smi-controller-sdk/apis/split/v1alpha4"
 	ctrl "sigs.k8s.io/controller-runtime"
 	controllerclient "sigs.k8s.io/controller-runtime/pkg/client"
 )
@@ -36,7 +36,7 @@ func (a *API) UpsertTrafficSplit(
 	ctx context.Context,
 	r controllerclient.Client,
 	l logr.Logger,
-	tt *splitv1alpha1.TrafficSplit) (ctrl.Result, error) {
+	tt *splitv1alpha4.TrafficSplit) (ctrl.Result, error) {
 
 	l.Info("Upsert new Traffic Split",
 		"service", tt.Spec.Service,
@@ -51,9 +51,8 @@ func (a *API) UpsertTrafficSplit(
 		ss.Splits = append(
 			ss.Splits,
 			api.ServiceSplit{
-				Service:       ss.Name,
-				ServiceSubset: b.Service,
-				Weight:        float32(b.Weight.AsDec().UnscaledBig().Int64()),
+				Service: b.Service,
+				Weight:  float32(b.Weight),
 			})
 	}
 
@@ -78,7 +77,7 @@ func (a *API) DeleteTrafficSplit(
 	ctx context.Context,
 	r controllerclient.Client,
 	l logr.Logger,
-	tt *splitv1alpha1.TrafficSplit) (ctrl.Result, error) {
+	tt *splitv1alpha4.TrafficSplit) (ctrl.Result, error) {
 
 	l.Info("Delete new Traffic Split",
 		"service", tt.Spec.Service,

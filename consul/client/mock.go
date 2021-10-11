@@ -20,3 +20,15 @@ func (c *MockImpl) DeleteServiceSplitter(name string) error {
 
 	return args.Error(0)
 }
+
+func (c *MockImpl) WriteServiceRoute(ss *api.ServiceRouterConfigEntry) error {
+	args := c.Called(ss)
+
+	return args.Error(0)
+}
+
+func (c *MockImpl) DeleteServiceRoute(name string) error {
+	args := c.Called(name)
+
+	return args.Error(0)
+}
