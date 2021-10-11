@@ -25,6 +25,7 @@ jobs:
       - uses: actions/setup-go@v2
         with:
           stable: 'true'
+      - run: go mod tidy -compat=1.17
       - run: go test --race -v ./...
 
   # Push image to GitHub Packages.
