@@ -40,7 +40,7 @@ jobs:
       - name: Run Functional Tests
         run: |
           eval $(shipyard env)
-          make functional_test
+          make functional_tests
 
   # Push image to GitHub Packages.
   # See also https://docs.docker.com/docker-hub/builds/
