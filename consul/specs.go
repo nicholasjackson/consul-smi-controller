@@ -88,10 +88,10 @@ func (a *API) DeleteHTTPRouteGroup(
 	tt *specsv1alpha4.HTTPRouteGroup) (ctrl.Result, error) {
 
 	l.Info("Delete new HTTPRouteGroup",
-		"service", tt.Name,
+		"service", tt.ObjectMeta.Name,
 	)
 
-	err := a.client.DeleteServiceRoute(tt.Name)
+	err := a.client.DeleteServiceRoute(tt.ObjectMeta.Name)
 	if err != nil {
 		l.Error(err, "Unable to delete ServiceRoute from Consul")
 	}

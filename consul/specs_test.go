@@ -8,6 +8,7 @@ import (
 	specsv1alpha4 "github.com/servicemeshinterface/smi-controller-sdk/apis/specs/v1alpha4"
 	"github.com/stretchr/testify/mock"
 	assert "github.com/stretchr/testify/require"
+	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
 func TestUpsertHTTPRouteGroup(t *testing.T) {
@@ -41,24 +42,40 @@ func TestUpsertHTTPRouteGroupWithInvalidMethodReturnsError(t *testing.T) {
 	a, _, l := setup(t)
 
 	specConfig := httpRouteGroupWithTwoMatches()
-	specConfig.Spec.Matches[0].Methods[0] = "*"
+	specConfig.Spec.Matches[0].Methods[0] = "BAR"
 
 	_, err := a.UpsertHTTPRouteGroup(context.Background(), nil, l, specConfig)
 	assert.Error(t, err)
 }
 
+func TestUpsertHTTPRouteGroupWithStarMethodSetsNothing(t *testing.T) {
+	a, mc, l := setup(t)
+
+	specConfig := httpRouteGroupWithTwoMatches()
+	specConfig.Spec.Matches[0].Methods[0] = "*"
+
+	_, err := a.UpsertHTTPRouteGroup(context.Background(), nil, l, specConfig)
+	assert.NoError(t, err)
+
+	args := mc.Mock.Calls[0].Arguments
+	ss := args.Get(0).(*api.ServiceRouterConfigEntry)
+
+	assert.Len(t, ss.Routes[0].Match.HTTP.Methods, 0)
+}
+
 func TestDeleteHTTPRouteGroupCallsConsul(t *testing.T) {
 	a, mc, l := setup(t)
 
-	splitConfig := splitWithTwoBackend()
-	_, err := a.DeleteTrafficSplit(context.Background(), nil, l, splitConfig)
+	specConfig := httpRouteGroupWithTwoMatches()
+	_, err := a.DeleteHTTPRouteGroup(context.Background(), nil, l, specConfig)
 	assert.NoError(t, err)
 
-	mc.AssertCalled(t, "DeleteServiceRoute", splitConfig.Spec.Service)
+	mc.AssertCalled(t, "DeleteServiceRoute", specConfig.ObjectMeta.Name)
 }
 
 func httpRouteGroupWithTwoMatches() *specsv1alpha4.HTTPRouteGroup {
 	rg := &specsv1alpha4.HTTPRouteGroup{
+		ObjectMeta: v1.ObjectMeta{Name: "testgroup"},
 		Spec: specsv1alpha4.HTTPRouteGroupSpec{
 			Matches: []specsv1alpha4.HTTPMatch{},
 		},
