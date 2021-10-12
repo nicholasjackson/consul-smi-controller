@@ -30,7 +30,7 @@ jobs:
         run: go mod tidy -compat=1.17
       
       - name: Run unit tests
-      - run: go test --race -v ./...
+        run: go test --race -v ./...
       
       - name: Setup Functional Tests
         run: |
