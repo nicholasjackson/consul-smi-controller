@@ -1,5 +1,5 @@
 DOCKER_REPO=nicholasjackson/smi-controller-consul
-DOCKER_VERSION=dev
+DOCKER_VERSION=dev.01
 
 build_docker:
 	docker build -t ${DOCKER_REPO}:${DOCKER_VERSION} .

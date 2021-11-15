@@ -42,6 +42,14 @@ variable "smi_controller_additional_dns" {
   default = "smi-webhook.shipyard.svc"
 }
 
+variable "consul_acls_enabled" {
+  default = true
+}
+
+variable "consul_tls_enabled" {
+  default = true
+}
+
 network "dc1" {
   subnet = "10.5.0.0/16"
 }
@@ -61,7 +69,7 @@ output "KUBECONFIG" {
 }
 
 module "consul" {
-  source = "github.com/shipyard-run/blueprints//modules/kubernetes-consul?ref=71f398718909eb684f1d03b64024e5b7989cf57d"
+  source = "github.com/shipyard-run/blueprints//modules/kubernetes-consul?ref=a6ee46a479de9fad68af54a90081b2c577d66195"
 }
 
 # Create an ingress which exposes the locally running webhook from kubernetes

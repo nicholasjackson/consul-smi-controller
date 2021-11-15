@@ -1,6 +1,8 @@
 # Build the manager binary
 FROM golang:1.17 as builder
 
+RUN apt update && apt install -y ca-certificates
+
 WORKDIR /workspace
 # Copy the Go Modules manifests
 COPY go.mod go.mod
@@ -20,9 +22,12 @@ RUN go mod tidy -compat=1.17 && \
 
 # Use distroless as minimal base image to package the manager binary
 # Refer to https://github.com/GoogleContainerTools/distroless for more details
-FROM gcr.io/distroless/static:nonroot
+#FROM gcr.io/distroless/static:nonroot
+FROM alpine:latest
 WORKDIR /
 COPY --from=builder /workspace/consul-smi-controller .
-USER nonroot:nonroot
+COPY --from=builder /etc/ssl/certs /etc/ssl/certs
+
+#USER nonroot:nonroot
 
 ENTRYPOINT ["/consul-smi-controller"]
